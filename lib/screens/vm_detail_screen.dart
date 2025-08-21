@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../services/audio_service.dart';
 import 'package:provider/provider.dart';
 import '../state/app_state.dart';
+import '../services/audio_controller.dart';
+import '../widgets/mini_player.dart';
 
 class VmDetailScreen extends StatefulWidget {
   static const String routeName = 'vm-detail';
@@ -42,6 +44,7 @@ class _VmDetailScreenState extends State<VmDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final controller = context.read<AudioController>();
     return Scaffold(
       appBar: AppBar(title: Text('VM ${widget.vmId.split('/').last}')),
       body: Padding(
@@ -84,6 +87,15 @@ class _VmDetailScreenState extends State<VmDetailScreen> {
                       );
                     },
                   ),
+                  const SizedBox(width: 12),
+                  ElevatedButton(
+                    onPressed: () async {
+                      final path = Uri.decodeComponent(widget.vmId);
+                      await controller.setSource(path);
+                      await controller.play();
+                    },
+                    child: const Text('Play in mini'),
+                  ),
                 ],
               ),
             const SizedBox(height: 16),
@@ -91,6 +103,7 @@ class _VmDetailScreenState extends State<VmDetailScreen> {
           ],
         ),
       ),
+      bottomNavigationBar: const MiniPlayer(),
     );
   }
 }

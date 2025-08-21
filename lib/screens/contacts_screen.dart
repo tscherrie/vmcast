@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../widgets/mini_player.dart';
 
 class ContactsScreen extends StatelessWidget {
   static const String routeName = 'contacts';
@@ -19,6 +20,7 @@ class ContactsScreen extends StatelessWidget {
           ),
         ],
       ),
+      bottomNavigationBar: const MiniPlayer(),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => context.go('/record'),
         label: const Text('Record'),

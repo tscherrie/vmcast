@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../services/record_index_service.dart';
 import 'package:path/path.dart' as p;
+import '../widgets/mini_player.dart';
 
 class VmListScreen extends StatefulWidget {
   static const String routeName = 'vm-list';
@@ -50,17 +51,41 @@ class _VmListScreenState extends State<VmListScreen> {
               itemBuilder: (context, index) {
                 final entry = items[index];
                 final vmId = Uri.encodeComponent(entry.filePath);
-                return ListTile(
-                  leading: const Icon(Icons.play_circle_filled),
-                  title: Text(p.basename(entry.filePath)),
-                  subtitle: Text(entry.createdAt.toLocal().toString()),
-                  onTap: () => context.go('/contact/${widget.contactId}/vm/$vmId'),
+                return Dismissible(
+                  key: ValueKey(entry.filePath),
+                  background: Container(color: Colors.red, alignment: Alignment.centerRight, padding: const EdgeInsets.only(right: 16), child: const Icon(Icons.delete, color: Colors.white)),
+                  direction: DismissDirection.endToStart,
+                  confirmDismiss: (direction) async {
+                    final ok = await showDialog<bool>(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Delete recording?'),
+                        content: Text(p.basename(entry.filePath)),
+                        actions: [
+                          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
+                          TextButton(onPressed: () => Navigator.pop(context, true), child: const Text('Delete')),
+                        ],
+                      ),
+                    );
+                    return ok == true;
+                  },
+                  onDismissed: (_) async {
+                    await _index.deleteRecording(entry.filePath);
+                    _refresh();
+                  },
+                  child: ListTile(
+                    leading: const Icon(Icons.play_circle_filled),
+                    title: Text(p.basename(entry.filePath)),
+                    subtitle: Text(entry.createdAt.toLocal().toString()),
+                    onTap: () => context.go('/contact/${widget.contactId}/vm/$vmId'),
+                  ),
                 );
               },
             );
           },
         ),
       ),
+      bottomNavigationBar: const MiniPlayer(),
     );
   }
 }

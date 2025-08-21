@@ -8,6 +8,7 @@ import 'screens/vm_detail_screen.dart';
 import 'screens/record_screen.dart';
 import 'screens/settings_screen.dart';
 import 'state/app_state.dart';
+import 'services/audio_controller.dart';
 
 class VmcastApp extends StatefulWidget {
   const VmcastApp({super.key});
@@ -64,8 +65,11 @@ class _VmcastAppState extends State<VmcastApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => AppState()..load(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AppState()..load()),
+        ChangeNotifierProvider(create: (_) => AudioController()..initialize()),
+      ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: 'vmcast',

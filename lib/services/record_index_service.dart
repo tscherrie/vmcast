@@ -29,6 +29,15 @@ class RecordIndexService {
     entries.sort((a, b) => b.createdAt.compareTo(a.createdAt));
     return entries;
   }
+
+  Future<bool> deleteRecording(String filePath) async {
+    final file = File(filePath);
+    if (await file.exists()) {
+      await file.delete();
+      return true;
+    }
+    return false;
+  }
 }
 
 
