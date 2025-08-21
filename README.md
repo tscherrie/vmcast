@@ -5,9 +5,10 @@ Pro voice messenger for long-form, end-to-end encrypted voice messages with audi
 See `SPECS.md` for the full product and technical specifications.
 
 ## Roadmap (dev phases)
-- M1 — Local core
-  - Recording/playback (reliable, background where allowed), local storage, delete
-  - Basic UI: Contacts → VM List → VM Detail; Settings skeleton
+- M1 — Local core (in progress)
+  - DONE: Flutter app scaffold; routing; Contacts/VM List/VM Detail/Record/Settings screens
+  - DONE: Basic recording service (AAC mono 16 kHz), permissions; basic playback service
+  - NEXT: Local storage of recordings and simple in-app listing
 - M2 — Transport + E2EE
   - Decentralized relays (store-and-forward), resumable media upload/download
   - libsignal (X3DH + Double Ratchet), encrypted receipts, push wake-ups
@@ -137,6 +138,28 @@ RELAYS_DEFAULT=wss://relay1.example.org,wss://relay2.example.org
 - Unit tests: `flutter test`
 - Integration tests: `flutter test integration_test`
 - Golden tests and E2E: will be added alongside implementation milestones
+
+## Current run instructions
+macOS desktop (quickest way to verify UI):
+```bash
+flutter run -d macos
+```
+
+iOS Simulator:
+```bash
+open -a Simulator
+flutter run -d ios
+```
+
+Android Emulator:
+```bash
+flutter devices
+flutter run -d <your-android-device-id>
+```
+
+Recording note:
+- On first record attempt, the app will prompt for microphone permission.
+- Saved recording paths are shown on the Record screen (temporary stub). Local storage listing will be added next.
 
 ### Troubleshooting
 - If `flutter doctor` shows iOS toolchain issues, ensure Xcode Command Line Tools are selected in Preferences → Locations.
