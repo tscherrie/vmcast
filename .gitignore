@@ -1,0 +1,90 @@
+# General OS files
+.DS_Store
+Thumbs.db
+
+# Editors/IDEs
+.idea/
+*.iml
+.vscode/
+.history/
+.atom/
+
+# Logs and temp
+*.log
+*.swp
+*.tmp
+*.lock
+
+# Dart/Flutter
+.dart_tool/
+.packages
+.pub/
+.pub-cache/
+build/
+lib/generated_plugin_registrant.dart
+.flutter-plugins
+.flutter-plugins-dependencies
+.metadata
+
+# Android
+**/android/.gradle/
+**/android/captures/
+**/android/local.properties
+**/android/**/gradle-wrapper.jar
+**/android/gradlew
+**/android/gradlew.bat
+**/android/**/GeneratedPluginRegistrant.java
+**/android/build/
+
+# iOS
+**/ios/Pods/
+**/ios/.symlinks/
+**/ios/Flutter/.last_build_id
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/ephemeral/
+**/ios/Flutter/App.framework
+**/ios/Flutter/Debug.xcconfig
+**/ios/Flutter/Release.xcconfig
+**/ios/Runner/GeneratedPluginRegistrant.*
+**/ios/build/
+
+# macOS
+**/macos/Pods/
+**/macos/Flutter/ephemeral/
+**/macos/Flutter/Flutter-Debug.xcconfig
+**/macos/Flutter/Flutter-Release.xcconfig
+**/macos/Flutter/Flutter-Generated.xcconfig
+**/macos/build/
+**/macos/Runner/GeneratedPluginRegistrant.*
+
+# Windows
+**/windows/flutter/ephemeral/
+**/windows/build/
+
+# Linux
+**/linux/flutter/ephemeral/
+**/linux/build/
+
+# Coverage
+coverage/
+
+# Environment/config
+.env
+.env.*
+
+# Local AI models (managed by model manager; do not commit large binaries)
+assets/models/**/*.bin
+assets/models/**/*.gguf
+assets/models/**/*.ggml
+assets/models/**/*.onnx
+assets/models/**/*.pth
+assets/models/**/*.pt
+
+# Node (if tooling/scripts used)
+node_modules/
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
