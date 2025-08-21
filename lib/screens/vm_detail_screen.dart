@@ -20,6 +20,8 @@ class _VmDetailScreenState extends State<VmDetailScreen> {
   final AudioService _audio = AudioService();
   bool _ready = false;
   double _speed = 1.0;
+  Duration _position = Duration.zero;
+  Duration? _duration;
 
   @override
   void initState() {
@@ -34,6 +36,14 @@ class _VmDetailScreenState extends State<VmDetailScreen> {
     if (mounted) {
       setState(() => _ready = true);
     }
+    _audio.positionStream.listen((d) {
+      if (!mounted) return;
+      setState(() => _position = d ?? Duration.zero);
+    });
+    _audio.durationStream.listen((d) {
+      if (!mounted) return;
+      setState(() => _duration = d);
+    });
   }
 
   @override
@@ -58,7 +68,10 @@ class _VmDetailScreenState extends State<VmDetailScreen> {
                 children: [
                   IconButton(
                     icon: const Icon(Icons.replay_10),
-                    onPressed: () => _audio.seek(const Duration(seconds: 0)),
+                    onPressed: () {
+                      final newPos = _position - const Duration(seconds: 10);
+                      _audio.seek(newPos < Duration.zero ? Duration.zero : newPos);
+                    },
                   ),
                   IconButton(
                     icon: const Icon(Icons.play_arrow),
@@ -87,6 +100,14 @@ class _VmDetailScreenState extends State<VmDetailScreen> {
                       );
                     },
                   ),
+                  IconButton(
+                    icon: const Icon(Icons.forward_10),
+                    onPressed: () {
+                      final dur = _duration ?? Duration.zero;
+                      final newPos = _position + const Duration(seconds: 10);
+                      _audio.seek(newPos > dur ? dur : newPos);
+                    },
+                  ),
                   const SizedBox(width: 12),
                   ElevatedButton(
                     onPressed: () async {
@@ -98,6 +119,24 @@ class _VmDetailScreenState extends State<VmDetailScreen> {
                   ),
                 ],
               ),
+            if (_duration != null)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Slider(
+                    value: _position.inMilliseconds.clamp(0, _duration!.inMilliseconds).toDouble(),
+                    max: _duration!.inMilliseconds.toDouble(),
+                    onChanged: (v) => _audio.seek(Duration(milliseconds: v.toInt())),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(_fmt(_position)),
+                      Text(_fmt(_duration!)),
+                    ],
+                  ),
+                ],
+              ),
             const SizedBox(height: 16),
             const Text('Transcript placeholder'),
           ],
@@ -105,6 +144,14 @@ class _VmDetailScreenState extends State<VmDetailScreen> {
       ),
       bottomNavigationBar: const MiniPlayer(),
     );
+  }
+
+  String _fmt(Duration d) {
+    String two(int n) => n.toString().padLeft(2, '0');
+    final h = d.inHours;
+    final m = d.inMinutes.remainder(60);
+    final s = d.inSeconds.remainder(60);
+    return h > 0 ? '${two(h)}:${two(m)}:${two(s)}' : '${two(m)}:${two(s)}';
   }
 }
 
