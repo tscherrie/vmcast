@@ -140,18 +140,18 @@ RELAYS_DEFAULT=wss://relay1.example.org,wss://relay2.example.org
 - Golden tests and E2E: will be added alongside implementation milestones
 
 ## Current run instructions
-macOS desktop (quickest way to verify UI):
-```bash
-flutter run -d macos
-```
-
-iOS Simulator:
+iOS Simulator (focus first):
 ```bash
 open -a Simulator
 flutter run -d ios
 ```
 
-Android Emulator:
+macOS desktop (optional):
+```bash
+flutter run -d macos
+```
+
+Android Emulator
 ```bash
 flutter devices
 flutter run -d <your-android-device-id>

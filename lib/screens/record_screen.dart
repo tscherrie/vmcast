@@ -13,6 +13,7 @@ class _RecordScreenState extends State<RecordScreen> {
   final RecordingService _recording = RecordingService();
   String? _currentPath;
   bool _isRecording = false;
+  String _status = '';
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +29,15 @@ class _RecordScreenState extends State<RecordScreen> {
               ElevatedButton(
                 onPressed: () async {
                   final path = await _recording.start();
-                  if (path != null) {
-                    setState(() {
+                  setState(() {
+                    if (path != null) {
                       _currentPath = path;
                       _isRecording = true;
-                    });
-                  }
+                      _status = 'Recording…';
+                    } else {
+                      _status = 'Failed to start (permission or encoder)';
+                    }
+                  });
                 },
                 child: const Text('Start recording'),
               )
@@ -44,16 +48,16 @@ class _RecordScreenState extends State<RecordScreen> {
                   setState(() {
                     _currentPath = path ?? _currentPath;
                     _isRecording = false;
+                    _status = 'Saved';
                   });
                 },
                 child: const Text('Stop'),
               ),
             const SizedBox(height: 12),
-            if (_currentPath != null)
-              Text(
-                _isRecording ? 'Recording…' : 'Saved: $_currentPath',
-                textAlign: TextAlign.center,
-              ),
+            Text(
+              _currentPath == null ? _status : (_isRecording ? 'Recording…' : 'Saved: $_currentPath'),
+              textAlign: TextAlign.center,
+            ),
           ],
         ),
       ),
