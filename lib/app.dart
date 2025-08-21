@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
 import 'screens/contacts_screen.dart';
@@ -6,6 +7,7 @@ import 'screens/vm_list_screen.dart';
 import 'screens/vm_detail_screen.dart';
 import 'screens/record_screen.dart';
 import 'screens/settings_screen.dart';
+import 'state/app_state.dart';
 
 class VmcastApp extends StatefulWidget {
   const VmcastApp({super.key});
@@ -62,14 +64,17 @@ class _VmcastAppState extends State<VmcastApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      title: 'vmcast',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
-        useMaterial3: true,
+    return ChangeNotifierProvider(
+      create: (_) => AppState()..load(),
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        title: 'vmcast',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
+          useMaterial3: true,
+        ),
+        routerConfig: _router,
       ),
-      routerConfig: _router,
     );
   }
 }

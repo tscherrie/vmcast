@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/audio_service.dart';
+import 'package:provider/provider.dart';
+import '../state/app_state.dart';
 
 class VmDetailScreen extends StatefulWidget {
   static const String routeName = 'vm-detail';
@@ -27,7 +29,9 @@ class _VmDetailScreenState extends State<VmDetailScreen> {
     await _audio.initialize();
     final path = Uri.decodeComponent(widget.vmId);
     await _audio.setSource(path);
-    setState(() => _ready = true);
+    if (mounted) {
+      setState(() => _ready = true);
+    }
   }
 
   @override
@@ -62,15 +66,22 @@ class _VmDetailScreenState extends State<VmDetailScreen> {
                     onPressed: _audio.pause,
                   ),
                   const SizedBox(width: 12),
-                  DropdownButton<double>(
-                    value: _speed,
-                    items: const [
-                      0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 2.5, 3.0
-                    ].map((v) => DropdownMenuItem(value: v, child: Text('${v}x'))).toList(),
-                    onChanged: (v) {
-                      if (v == null) return;
-                      setState(() => _speed = v);
-                      _audio.setSpeed(v);
+                  Consumer<AppState>(
+                    builder: (context, app, _) {
+                      _speed = app.playbackSpeed;
+                      return DropdownButton<double>(
+                        value: _speed,
+                        items: const [
+                          0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 2.5, 3.0
+                        ]
+                            .map((v) => DropdownMenuItem(value: v, child: Text('${v}x')))
+                            .toList(),
+                        onChanged: (v) {
+                          if (v == null) return;
+                          app.setPlaybackSpeed(v);
+                          _audio.setSpeed(v);
+                        },
+                      );
                     },
                   ),
                 ],
