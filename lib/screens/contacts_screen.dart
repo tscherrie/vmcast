@@ -9,7 +9,15 @@ class ContactsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('vmcast')),
+      appBar: AppBar(
+        title: const Text('vmcast'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () => context.go('/search'),
+          ),
+        ],
+      ),
       body: ListView(
         children: [
           ListTile(

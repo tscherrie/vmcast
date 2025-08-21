@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import '../services/record_index_service.dart';
 import 'package:path/path.dart' as p;
 import '../widgets/mini_player.dart';
+import '../repository/recordings_repository.dart';
 
 class VmListScreen extends StatefulWidget {
   static const String routeName = 'vm-list';
@@ -16,6 +17,7 @@ class VmListScreen extends StatefulWidget {
 class _VmListScreenState extends State<VmListScreen> {
   final RecordIndexService _index = RecordIndexService();
   late Future<List<RecordingEntry>> _future;
+  final RecordingsRepository _repo = RecordingsRepository();
 
   @override
   void initState() {
@@ -71,6 +73,7 @@ class _VmListScreenState extends State<VmListScreen> {
                   },
                   onDismissed: (_) async {
                     await _index.deleteRecording(entry.filePath);
+                    await _repo.deleteByPath(entry.filePath);
                     _refresh();
                   },
                   child: ListTile(

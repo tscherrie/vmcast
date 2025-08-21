@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/recording_service.dart';
 import '../services/record_index_service.dart';
+import '../repository/recordings_repository.dart';
 
 class RecordScreen extends StatefulWidget {
   static const String routeName = 'record';
@@ -13,6 +14,7 @@ class RecordScreen extends StatefulWidget {
 class _RecordScreenState extends State<RecordScreen> {
   final RecordingService _recording = RecordingService();
   final RecordIndexService _index = RecordIndexService();
+  final RecordingsRepository _repo = RecordingsRepository();
   String? _currentPath;
   bool _isRecording = false;
   String _status = '';
@@ -54,6 +56,12 @@ class _RecordScreenState extends State<RecordScreen> {
                   });
                   // Warm refresh by touching index once
                   await _index.listRecordings();
+                  if (_currentPath != null) {
+                    await _repo.upsertByPath(
+                      filePath: _currentPath!,
+                      createdAt: DateTime.now(),
+                    );
+                  }
                 },
                 child: const Text('Stop'),
               ),

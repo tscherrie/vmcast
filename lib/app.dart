@@ -9,6 +9,7 @@ import 'screens/record_screen.dart';
 import 'screens/settings_screen.dart';
 import 'state/app_state.dart';
 import 'services/audio_controller.dart';
+import 'screens/search_screen.dart';
 
 class VmcastApp extends StatefulWidget {
   const VmcastApp({super.key});
@@ -56,6 +57,11 @@ class _VmcastAppState extends State<VmcastApp> {
               path: 'settings',
               name: SettingsScreen.routeName,
               builder: (context, state) => const SettingsScreen(),
+            ),
+            GoRoute(
+              path: 'search',
+              name: SearchScreen.routeName,
+              builder: (context, state) => const SearchScreen(),
             ),
           ],
         ),
