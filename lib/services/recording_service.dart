@@ -32,6 +32,10 @@ class RecordingService {
         ),
         path: path,
       );
+      final started = await _recorder.isRecording();
+      if (!started) {
+        return null;
+      }
       return path;
     } catch (_) {
       return null;

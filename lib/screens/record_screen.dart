@@ -58,6 +58,14 @@ class _RecordScreenState extends State<RecordScreen> {
               _currentPath == null ? _status : (_isRecording ? 'Recording…' : 'Saved: $_currentPath'),
               textAlign: TextAlign.center,
             ),
+            const SizedBox(height: 8),
+            FutureBuilder<bool>(
+              future: _recording.isRecording(),
+              builder: (context, snapshot) {
+                final rec = snapshot.data == true;
+                return Text('isRecording: $rec', style: const TextStyle(fontSize: 12, color: Colors.grey));
+              },
+            ),
           ],
         ),
       ),
